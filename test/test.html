@@ -6,11 +6,10 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="../node_modules/babel-core/browser.js"></script>
-    <script type="text/babel" src="../dist/prefix-property.js"></script>
+    <script src="../dist/prefix-property.browser.js"></script>
     <script src="https://cdn.rawgit.com/mochajs/mocha/2.3.0/mocha.js"></script>
     <script>mocha.setup('bdd')</script>
-    <script type="text/babel" src="test.js"></script>
+    <script src="test.browser.js"></script>
     <script>
         mocha.checkLeaks();
         mocha.globals(['prefixProperty']);

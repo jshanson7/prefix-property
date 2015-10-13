@@ -6,12 +6,12 @@
   "scripts": {
     "start": "npm run test",
     "test": "npm run lint && npm run build && npm run test-node && npm run test-browser",
-    "test-browser": "node_modules/.bin/http-server test && open test/test.html",
-    "test-node": "./node_modules/.bin/mocha test/test",
+    "test-browser": "open test/test.html",
+    "test-node": "./node_modules/.bin/mocha test/test.js",
     "test-watch": "./node_modules/.bin/mocha test/test --watch",
     "build": "npm run babel && npm run browserify && npm run uglify",
     "babel": "node_modules/.bin/babel src/prefix-property.js -o dist/prefix-property.js",
-    "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.browser.js -t babelify -s prefixProperty",
+    "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.browser.js -t babelify -s prefixProperty && node_modules/.bin/browserify test/test.js > test/test.browser.js -t babelify",
     "lint": "node_modules/.bin/eslint src/**/*.js test/test.js",
     "uglify": "node_modules/.bin/uglifyjs dist/prefix-property.browser.js -c -m -o dist/prefix-property.browser.min.js"
   },
