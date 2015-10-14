@@ -32,7 +32,6 @@ var _lodashLangIsString2 = _interopRequireDefault(_lodashLangIsString);
 
 exports['default'] = prefixProperty;
 
-// const style = document.body.style;
 var style = document.createElement('div').style;
 var prefixes = ['Webkit', 'Moz', 'ms', 'O'];
 

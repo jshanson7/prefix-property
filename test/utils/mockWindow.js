@@ -1,5 +1,5 @@
 export default ({ browser }) => {
-  const style = require(`./styleMocks/${browser}.json`);
+  const style = require(`../data/styleMocks/${browser}.json`);
   const document = {
     body: { style },
     createElement: () => ({ style })
