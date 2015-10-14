@@ -7,7 +7,6 @@ import isString from 'lodash/lang/isString';
 
 export default prefixProperty;
 
-// const style = document.body.style;
 const style = document.createElement('div').style;
 const prefixes = ['Webkit', 'Moz', 'ms', 'O'];
 
