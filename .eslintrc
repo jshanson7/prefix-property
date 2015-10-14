@@ -8,6 +8,7 @@ env:
   es6: true
 
 globals:
+  process: false
   document: false
   require: false
   describe: false
