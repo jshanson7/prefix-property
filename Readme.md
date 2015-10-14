@@ -15,4 +15,4 @@ prefixProperty.getPrefix('fontFeatureSettings') === 'Webkit';
 
 ```
 
-Run the tests on your browser here: [https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html](https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
+[Run the tests on your browser here.](https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
