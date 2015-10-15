@@ -62,7 +62,7 @@ npm run build
 
 ## Testing
 
-[Run the tests on your browser here.](https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
+[Run the tests on your browser here.](https://rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
 
 ```
 npm test

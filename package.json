@@ -1,6 +1,6 @@
 {
   "name": "prefix-property",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Vendor-prefix any property.",
   "author": "Jeff Hanson",
   "license": "MIT",
