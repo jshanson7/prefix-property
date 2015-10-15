@@ -14069,18 +14069,13 @@ var cssProp = (0, _lodashFunctionMemoize2['default'])(function (property) {
   return kebabProp;
 });
 
-var getPrefixForProp = (0, _lodashFunctionMemoize2['default'])(function (property) {
-  return propExists(property) ? '' : propExists(jsPrefix + (0, _lodashStringCapitalize2['default'])((0, _lodashStringCamelCase2['default'])(property))) ? jsPrefix :
-  // none found
-  '';
-});
-
 function prefixProperty(property) {
   return jsProp(property);
 }
 prefixProperty.js = jsProp;
 prefixProperty.css = cssProp;
-prefixProperty.getPrefix = getPrefixForProp;
+prefixProperty.jsPrefix = jsPrefix;
+prefixProperty.cssPrefix = cssPrefix;
 
 exports['default'] = prefixProperty;
 module.exports = exports['default'];
@@ -18485,6 +18480,11 @@ var unprefixedPropsByBrowser = {
   safari: require('./data/unprefixedProps/safari.json'),
   firefox: require('./data/unprefixedProps/firefox.json')
 };
+var prefixesByBrowser = {
+  chrome: { js: 'Webkit', css: '-webkit-' },
+  safari: { js: 'Webkit', css: '-webkit-' },
+  firefox: { js: 'Moz', css: '-moz-' }
+};
 
 browsersToTest.forEach(function (browser) {
   if (isNode) {
@@ -18492,11 +18492,16 @@ browsersToTest.forEach(function (browser) {
   }
 
   var prefixProperty = window.prefixProperty;
+  var js = prefixProperty.js;
+  var css = prefixProperty.css;
+  var jsPrefix = prefixProperty.jsPrefix;
+  var cssPrefix = prefixProperty.cssPrefix;
+
   var unprefixedProps = unprefixedPropsByBrowser[browser];
   var style = document.createElement('div').style;
-  var testProp = function testProp(prop, type) {
-    var prefixed = prefixProperty[type](prop);
-    var modifier = prefixed !== prop ? ' ==> ' + prefixed : '';
+  var testProp = function testProp(prop, method) {
+    var prefixed = method(prop);
+    var modifier = prefixed !== prop ? ' => ' + prefixed : '';
     it('' + prop + modifier, function () {
       (0, _assert2['default'])(style[prefixed] !== undefined);
     });
@@ -18506,34 +18511,46 @@ browsersToTest.forEach(function (browser) {
     describe(browser, function () {
 
       describe('exists', function () {
-        it('should exist', function () {
-          (0, _assert2['default'])(prefixProperty !== undefined);
+        return it('should exist', function () {
+          return (0, _assert2['default'])(prefixProperty !== undefined);
         });
       });
 
       describe('is a function', function () {
-        it('should be a function', function () {
-          (0, _assert2['default'])(typeof prefixProperty === 'function');
+        return it('should be a function', function () {
+          return (0, _assert2['default'])(typeof prefixProperty === 'function');
         });
       });
 
-      describe('JS prefixes', function () {
+      describe('#jsPrefix', function () {
+        return it('jsPrefix === ' + prefixesByBrowser[browser].js, function () {
+          return (0, _assert2['default'])(jsPrefix === prefixesByBrowser[browser].js);
+        });
+      });
+
+      describe('#cssPrefix', function () {
+        return it('cssPrefix === ' + prefixesByBrowser[browser].css, function () {
+          return (0, _assert2['default'])(cssPrefix === prefixesByBrowser[browser].css);
+        });
+      });
+
+      describe('#js()', function () {
         return unprefixedProps.forEach(function (prop) {
           var tested = {};
           var camelProp = (0, _lodash.camelCase)(prop);
           var kebabProp = (0, _lodash.kebabCase)(prop);
           if (!tested[camelProp]) {
-            testProp(camelProp, 'js');
+            testProp(camelProp, js);
             tested[camelProp] = true;
           }
           if (!tested[kebabProp]) {
-            testProp(kebabProp, 'js');
+            testProp(kebabProp, js);
             tested[kebabProp] = true;
           }
         });
       });
 
-      describe('CSS prefixes', function () {
+      describe('#css()', function () {
         if (browser === 'firefox') {
           // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
           // are valid props since they are undefined on the style object, yet valid in CSS
@@ -18544,11 +18561,11 @@ browsersToTest.forEach(function (browser) {
           var camelProp = (0, _lodash.camelCase)(prop);
           var kebabProp = (0, _lodash.kebabCase)(prop);
           if (!tested[camelProp]) {
-            testProp(camelProp, 'css');
+            testProp(camelProp, css);
             tested[camelProp] = true;
           }
           if (!tested[kebabProp]) {
-            testProp(kebabProp, 'css');
+            testProp(kebabProp, css);
             tested[kebabProp] = true;
           }
         });

@@ -1,7 +1,17 @@
 {
   "name": "prefix-property",
-  "version": "1.0.2",
-  "description": "Get the vendor-prefixed property.",
+  "version": "1.0.3",
+  "description": "Vendor-prefix any property.",
+  "author": "Jeff Hanson",
+  "license": "MIT",
+  "keywords": [
+    "prefix",
+    "property",
+    "vendor",
+    "detect",
+    "css",
+    "js"
+  ],
   "main": "dist/prefix-property.js",
   "scripts": {
     "start": "npm run test",
@@ -9,26 +19,21 @@
     "test-browser": "open test/test.html",
     "test-node": "./node_modules/.bin/mocha test/test.js",
     "test-watch": "./node_modules/.bin/mocha test/test.js --watch",
-    "build": "npm run babel && npm run browserify && npm run uglify && npm run inliner",
-    "babel": "node_modules/.bin/babel src/prefix-property.js -o dist/prefix-property.js",
-    "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.browser.js -t babelify -s prefixProperty && node_modules/.bin/browserify test/test.js > test/test.browser.js -t babelify",
+    "build": "npm run browserify && npm run uglify && npm run inliner",
+    "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.js -t babelify -s prefixProperty && node_modules/.bin/browserify test/test.js > test/test.browser.js -t babelify",
     "lint": "node_modules/.bin/eslint src/**/*.js test/test.js",
-    "uglify": "node_modules/.bin/uglifyjs dist/prefix-property.browser.js -c -m -o dist/prefix-property.browser.min.js",
+    "uglify": "node_modules/.bin/uglifyjs dist/prefix-property.js -c -m -o dist/prefix-property.min.js",
     "inliner": "node_modules/.bin/inliner test/test.html > test/test.inline.html"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jshanson7/prefix-property.git"
   },
-  "author": "Jeff Hanson",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jshanson7/prefix-property/issues"
   },
   "homepage": "https://github.com/jshanson7/prefix-property#readme",
-  "dependencies": {
-    "lodash": "^3.10.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-core": "^5.8.25",
@@ -37,6 +42,7 @@
     "browserify": "^11.2.0",
     "eslint": "^1.6.0",
     "inliner": "^1.3.0",
+    "lodash": "^3.10.1",
     "mocha": "^2.3.3",
     "uglifyjs": "^2.4.10"
   }

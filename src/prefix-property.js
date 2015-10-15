@@ -39,16 +39,10 @@ const cssProp = memoize(property => {
   return kebabProp;
 });
 
-const getPrefixForProp = memoize(property => {
-  return propExists(property) ? '' :
-    propExists(jsPrefix + capitalize(camelCase(property))) ? jsPrefix :
-    // none found
-    '';
-});
-
 function prefixProperty(property) { return jsProp(property); }
 prefixProperty.js = jsProp;
 prefixProperty.css = cssProp;
-prefixProperty.getPrefix = getPrefixForProp;
+prefixProperty.jsPrefix = jsPrefix;
+prefixProperty.cssPrefix = cssPrefix;
 
 export default prefixProperty;

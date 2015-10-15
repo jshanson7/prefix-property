@@ -10,6 +10,11 @@ const unprefixedPropsByBrowser = {
   safari: require('./data/unprefixedProps/safari.json'),
   firefox: require('./data/unprefixedProps/firefox.json')
 };
+const prefixesByBrowser = {
+  chrome: { js: 'Webkit', css: '-webkit-' },
+  safari: { js: 'Webkit', css: '-webkit-' },
+  firefox: { js: 'Moz', css: '-moz-' }
+};
 
 browsersToTest.forEach(browser => {
   if (isNode) {
@@ -17,11 +22,17 @@ browsersToTest.forEach(browser => {
   }
 
   const prefixProperty = window.prefixProperty;
+  const {
+    js,
+    css,
+    jsPrefix,
+    cssPrefix
+  } = prefixProperty;
   const unprefixedProps = unprefixedPropsByBrowser[browser];
   const style = document.createElement('div').style;
-  const testProp = (prop, type) => {
-    const prefixed = prefixProperty[type](prop);
-    const modifier = prefixed !== prop ? ` ==> ${prefixed}` : ``;
+  const testProp = (prop, method) => {
+    const prefixed = method(prop);
+    const modifier = prefixed !== prop ? ` => ${prefixed}` : ``;
     it(`${prop}` + modifier, () => {
       assert(style[prefixed] !== undefined);
     });
@@ -30,35 +41,47 @@ browsersToTest.forEach(browser => {
   describe('prefixProperty', () => {
     describe(browser, () => {
 
-      describe('exists', () => {
-        it('should exist', () => {
-          assert(prefixProperty !== undefined);
-        });
-      });
+      describe('exists', () =>
+        it('should exist', () =>
+          assert(prefixProperty !== undefined)
+        )
+      );
 
-      describe('is a function', () => {
-        it('should be a function', () => {
-          assert(typeof prefixProperty === 'function');
-        });
-      });
+      describe('is a function', () =>
+        it('should be a function', () =>
+          assert(typeof prefixProperty === 'function')
+        )
+      );
 
-      describe('JS prefixes', () =>
+      describe('#jsPrefix', () =>
+        it('jsPrefix === ' + prefixesByBrowser[browser].js, () =>
+          assert(jsPrefix === prefixesByBrowser[browser].js)
+        )
+      );
+
+      describe('#cssPrefix', () =>
+        it('cssPrefix === ' + prefixesByBrowser[browser].css, () =>
+          assert(cssPrefix === prefixesByBrowser[browser].css)
+        )
+      );
+
+      describe('#js()', () =>
         unprefixedProps.forEach(prop => {
           const tested = {};
           const camelProp = camelCase(prop);
           const kebabProp = kebabCase(prop);
           if (!tested[camelProp]) {
-            testProp(camelProp, 'js');
+            testProp(camelProp, js);
             tested[camelProp] = true;
           }
           if (!tested[kebabProp]) {
-            testProp(kebabProp, 'js');
+            testProp(kebabProp, js);
             tested[kebabProp] = true;
           }
         })
       );
 
-      describe('CSS prefixes', () => {
+      describe('#css()', () => {
         if (browser === 'firefox') {
           // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
           // are valid props since they are undefined on the style object, yet valid in CSS
@@ -69,11 +92,11 @@ browsersToTest.forEach(browser => {
           const camelProp = camelCase(prop);
           const kebabProp = kebabCase(prop);
           if (!tested[camelProp]) {
-            testProp(camelProp, 'css');
+            testProp(camelProp, css);
             tested[camelProp] = true;
           }
           if (!tested[kebabProp]) {
-            testProp(kebabProp, 'css');
+            testProp(kebabProp, css);
             tested[kebabProp] = true;
           }
         });
