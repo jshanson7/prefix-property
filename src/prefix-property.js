@@ -1,13 +1,12 @@
-import kebabCase from 'lodash/string/kebabCase';
+export default prefixProperty;
 
 const styles = window.getComputedStyle(document.documentElement, '');
-const prefix = (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o']))[1];
+const prefix = (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) ||
+  (styles.OLink === '' && ['', 'o']))[1];
 const jsPrefix = ('Webkit|Moz|ms|O').match(new RegExp('(' + prefix + ')', 'i'))[1];
 const cssPrefix = `-${prefix}-`;
-const jsProps = {};
-const cssProps = {};
-
-export default prefixProperty;
+const jsMemos = {};
+const cssMemos = {};
 
 function prefixProperty(property) { return jsProp(property); }
 prefixProperty.js = jsProp;
@@ -16,34 +15,30 @@ prefixProperty.jsPrefix = jsPrefix;
 prefixProperty.cssPrefix = cssPrefix;
 
 function jsProp(property) {
-  var memo = jsProps[property];
+  const memo = jsMemos[property];
   if (memo) { return memo; }
   const camelProp = camelCase(property);
-  if (propExists(camelProp)) { return jsProps[property] = camelProp; }
-
+  if (propExists(camelProp)) { return jsMemos[property] = camelProp; }
   const prefixed = jsPrefix + capitalize(camelProp);
-  if (propExists(prefixed)) { return jsProps[property] = prefixed; }
+  if (propExists(prefixed)) { return jsMemos[property] = prefixed; }
 
-  return jsProp;
+  return camelProp;
 }
 
 function cssProp(property) {
-  var memo = cssProps[property];
+  const memo = cssMemos[property];
   if (memo) { return memo; }
   const kebabProp = kebabCase(property);
-  if (propExists(kebabProp)) { return cssProps[property] = kebabProp; }
-
+  if (propExists(kebabProp)) { return cssMemos[property] = kebabProp; }
   const prefixed = cssPrefix + kebabProp;
-  if (propExists(prefixed)) { return cssProps[property] = prefixed; }
+  if (propExists(prefixed)) { return cssMemos[property] = prefixed; }
 
-  // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
-  // are valid props since they are undefined on the style object, yet valid in CSS
   if (prefix === 'moz') {
     const prefixedJS = jsProp(property);
     const mozPrefixed = (prefixedJS.lastIndexOf(jsPrefix, 0) === 0) ?
       '-' + kebabCase(prefixedJS) :
       kebabProp;
-    return cssProps[property] = mozPrefixed;
+    return cssMemos[property] = mozPrefixed;
   }
 
   return kebabProp;
@@ -58,8 +53,14 @@ function capitalize(str) {
 }
 
 function camelCase(str) {
-  return str.replace(/-/g, ' ').replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-    if (/\s+/.test(match)) { return ''; }
-    return index == 0 ? match.toLowerCase() : match.toUpperCase();
-  });
+  return str.replace(/-/g, ' ').replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+    /\s+/.test(match) ? '' :
+      index === 0 ? match.toLowerCase() :
+      match.toUpperCase()
+  );
+}
+
+function kebabCase(str) {
+  return str.replace(/([a-z\d])([A-Z])/g, '$1_$2')
+    .toLowerCase().replace(/[ _]/g, '-');
 }

@@ -1,4 +1,4 @@
-# Prefix Property [![Build Status](https://travis-ci.org/jshanson7/prefix-property.svg)](https://travis-ci.org/jshanson7/prefix-property) [![npm version](https://badge.fury.io/js/prefix-property.svg)](http://badge.fury.io/js/prefix-property)
+# Prefix Property [![NPM version][npm-image]][npm-url] [![NPM downloads][downloads-image]][downloads-url] [![Build status][travis-image]][travis-url]
 
 An in-browser vendor prefixer that doesn't suck.
 
@@ -88,3 +88,14 @@ npm run test-node
 ```
 npm run lint
 ```
+
+## License
+
+MIT
+
+[npm-image]: https://img.shields.io/npm/v/prefix-property.svg?style=flat
+[npm-url]: https://npmjs.org/package/prefix-property
+[downloads-image]: https://img.shields.io/npm/dm/prefix-property.svg?style=flat
+[downloads-url]: https://npmjs.org/package/prefix-property
+[travis-image]: https://img.shields.io/travis/jshanson7/prefix-property.svg?style=flat
+[travis-url]: https://travis-ci.org/jshanson7/prefix-property

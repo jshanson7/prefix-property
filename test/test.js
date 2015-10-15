@@ -17,9 +17,7 @@ const prefixesByBrowser = {
 };
 
 browsersToTest.forEach(browser => {
-  if (isNode) {
-    mockWindow({ browser });
-  }
+  if (isNode) { mockWindow({ browser }); }
 
   const prefixProperty = window.prefixProperty;
   const {
@@ -65,7 +63,12 @@ browsersToTest.forEach(browser => {
         )
       );
 
-      describe('#js()', () =>
+      describe('#js()', () => {
+        it('invalidProperty => invalidProperty', () => {
+          assert(js('invalidProperty') === 'invalidProperty');
+          assert(js('invalid-property') === 'invalidProperty');
+        });
+
         unprefixedProps.forEach(prop => {
           const tested = {};
           const camelProp = camelCase(prop);
@@ -78,10 +81,15 @@ browsersToTest.forEach(browser => {
             testProp(kebabProp, js);
             tested[kebabProp] = true;
           }
-        })
-      );
+        });
+      });
 
       describe('#css()', () => {
+        it('invalid-property => invalid-property', () => {
+          assert(css('invalidProperty') === 'invalid-property');
+          assert(css('invalid-property') === 'invalid-property');
+        });
+
         if (browser === 'firefox') {
           // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
           // are valid props since they are undefined on the style object, yet valid in CSS
