@@ -10,8 +10,8 @@ import prefixProperty from 'prefix-property';
 const prefixProperty = window.prefixProperty;
 
 // in chrome:
-prefixProperty('fontFeatureSettings') === 'WebkitFontFeatureSettings';
-prefixProperty.css('fontFeatureSettings') === '-webkit-font-feature-settings';
+prefixProperty('fontFeatureSettings');      // => 'WebkitFontFeatureSettings'
+prefixProperty.css('fontFeatureSettings');  // => '-webkit-font-feature-settings'
 
 ```
 
@@ -21,18 +21,18 @@ Advanced usage:
 import { js, css, jsPrefix, cssPrefix } from 'prefix-property';
 
 // in chrome:
-js('fontFeatureSettings') === 'WebkitFontFeatureSettings';
-js('font-feature-settings') === 'WebkitFontFeatureSettings';
-css('fontFeatureSettings') === '-webkit-font-feature-settings';
-css('font-feature-settings') === '-webkit-font-feature-settings';
+js('fontFeatureSettings');      // => 'WebkitFontFeatureSettings'
+js('font-feature-settings');    // => 'WebkitFontFeatureSettings'
+css('fontFeatureSettings');     // => '-webkit-font-feature-settings'
+css('font-feature-settings');   // => '-webkit-font-feature-settings'
 
 // browser's prefix:
-jsPrefix === 'Webkit';
-cssPrefix === '-webkit-';
+console.log(jsPrefix);    // => 'Webkit'
+console.log(cssPrefix);   // => '-webkit-'
 
 // non-prefixed properties:
-js('color') === 'color';
-js('backgroundColor') === 'backgroundColor';
+js('color');              // => 'color'
+js('background-color');   // => 'backgroundColor'
 
 ```
 
