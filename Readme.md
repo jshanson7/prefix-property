@@ -5,13 +5,13 @@ An in-browser vendor prefixer that doesn't suck.
 Simple usage:
 
 ```javascript
-import prefixProperty from 'prefix-property';
+import prefix from 'prefix-property';
 // or 
-const prefixProperty = window.prefixProperty;
+const prefix = window.prefixProperty;
 
 // in chrome:
-prefixProperty('fontFeatureSettings');      // => 'WebkitFontFeatureSettings'
-prefixProperty.css('fontFeatureSettings');  // => '-webkit-font-feature-settings'
+prefix('fontFeatureSettings');      // => 'WebkitFontFeatureSettings'
+prefix.css('fontFeatureSettings');  // => '-webkit-font-feature-settings'
 
 ```
 
