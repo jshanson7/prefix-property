@@ -1,4 +1,3 @@
-import camelCase from 'lodash/string/camelCase';
 import kebabCase from 'lodash/string/kebabCase';
 
 const styles = window.getComputedStyle(document.documentElement, '');
@@ -56,4 +55,11 @@ function propExists(property) {
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function camelCase(str) {
+  return str.replace(/-/g, ' ').replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+    if (/\s+/.test(match)) { return ''; }
+    return index == 0 ? match.toLowerCase() : match.toUpperCase();
+  });
 }
