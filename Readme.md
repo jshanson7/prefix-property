@@ -1,6 +1,6 @@
 # Prefix Property
 
-Vendor-prefix any property.
+An in-browser vendor prefixer that doesn't suck.
 
 Simple usage:
 
@@ -36,7 +36,55 @@ js('backgroundColor') === 'backgroundColor';
 
 ```
 
-The default output of `prefixProperty()` is a JS-friendly prop (ex: `WebkitTransformOriginX`).  To get a CSS-friendly prop, use `prefixProperty.css()` (ex: `-webkit-transform-origin-x`).
+The default output of `prefixProperty()` is a JS-friendly prop (ex: `WebkitTransformOriginX`).
+
+To get a CSS-friendly prop, use `prefixProperty.css()` (ex: `-webkit-transform-origin-x`).
+
+## Installation
+
+```
+npm i prefix-property --save
+```
+or add `/dist/prefix-property.min.js` to your html.
+
+## Contributing
+
+Clone repo, cd into it, then
+```
+npm install && npm test
+```
+
+## Building
+
+```
+npm run build
+```
 
 ## Testing
+
 [Run the tests on your browser here.](https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
+
+```
+npm test
+```
+
+For live retesting:
+```
+npm run test-watch
+```
+
+Browser:
+```
+npm run build && open test/test.html
+```
+
+Node:
+```
+npm run test-node
+```
+
+## Linting
+
+```
+npm run lint
+```
