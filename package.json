@@ -1,6 +1,6 @@
 {
   "name": "prefix-property",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Vendor-prefix any property.",
   "author": "Jeff Hanson",
   "license": "MIT",
@@ -15,11 +15,11 @@
   "main": "dist/prefix-property.js",
   "scripts": {
     "start": "npm run test",
-    "test": "npm run lint && npm run build && npm run test-node && npm run test-browser",
+    "build": "npm run browserify && npm run uglify && npm run inliner",
+    "test": "npm run lint && npm run test-node",
     "test-browser": "open test/test.html",
     "test-node": "./node_modules/.bin/mocha test/test.js",
     "test-watch": "./node_modules/.bin/mocha test/test.js --watch",
-    "build": "npm run browserify && npm run uglify && npm run inliner",
     "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.js -t babelify -s prefixProperty && node_modules/.bin/browserify test/test.js > test/test.browser.js -t babelify",
     "lint": "node_modules/.bin/eslint src/**/*.js test/test.js",
     "uglify": "node_modules/.bin/uglifyjs dist/prefix-property.js -c -m -o dist/prefix-property.min.js",

@@ -1,4 +1,4 @@
-# Prefix Property
+# Prefix Property [![Build Status](https://travis-ci.org/jshanson7/prefix-property.svg)](https://travis-ci.org/jshanson7/prefix-property) [![npm version](https://badge.fury.io/js/prefix-property.svg)](http://badge.fury.io/js/prefix-property)
 
 An in-browser vendor prefixer that doesn't suck.
 
@@ -51,7 +51,7 @@ or add `/dist/prefix-property.min.js` to your html.
 
 Clone repo, cd into it, then
 ```
-npm install && npm test
+npm install && npm run build && npm test
 ```
 
 ## Building
