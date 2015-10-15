@@ -1,6 +1,6 @@
 {
   "name": "prefix-property",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Vendor-prefix any property.",
   "author": "Jeff Hanson",
   "license": "MIT",
@@ -40,10 +40,12 @@
     "babel-eslint": "^4.1.3",
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
+    "coveralls": "^2.11.4",
     "eslint": "^1.6.0",
     "inliner": "^1.3.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.3",
+    "mocha-lcov-reporter": "^1.0.0",
     "uglifyjs": "^2.4.10"
   }
 }
