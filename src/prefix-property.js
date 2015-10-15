@@ -41,8 +41,8 @@ function cssProp(property) {
   // are valid props since they are undefined on the style object, yet valid in CSS
   if (prefix === 'moz') {
     const prefixedJS = jsProp(property);
-    const mozPrefixed = prefixedJS.lastIndexOf(jsPrefix, 0) === 0 ?
-      ('-' + kebabCase(prefixedJS)) :
+    const mozPrefixed = (prefixedJS.lastIndexOf(jsPrefix, 0) === 0) ?
+      '-' + kebabCase(prefixedJS) :
       kebabProp;
     return cssProps[property] = mozPrefixed;
   }
