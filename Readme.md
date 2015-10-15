@@ -1,4 +1,4 @@
-# Prefix Property [![NPM version][npm-image]][npm-url] [![NPM downloads][downloads-image]][downloads-url] [![Build status][travis-image]][travis-url]
+# Prefix Property [![NPM version][npm-image]][npm-url] [![Build status][travis-image]][travis-url]
 
 An in-browser vendor prefixer that doesn't suck.
 
@@ -93,9 +93,7 @@ npm run lint
 
 MIT
 
-[npm-image]: https://img.shields.io/npm/v/prefix-property.svg?style=flat
+[npm-image]: https://badge.fury.io/js/prefix-property.svg
 [npm-url]: https://npmjs.org/package/prefix-property
-[downloads-image]: https://img.shields.io/npm/dm/prefix-property.svg?style=flat
-[downloads-url]: https://npmjs.org/package/prefix-property
 [travis-image]: https://img.shields.io/travis/jshanson7/prefix-property.svg?style=flat
 [travis-url]: https://travis-ci.org/jshanson7/prefix-property
