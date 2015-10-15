@@ -93,7 +93,7 @@ npm run lint
 
 MIT
 
-[npm-image]: https://badge.fury.io/js/prefix-property.svg?style=flat
+[npm-image]: https://badge.fury.io/js/prefix-property.svg
 [npm-url]: https://npmjs.org/package/prefix-property
 [travis-image]: https://travis-ci.org/jshanson7/prefix-property.svg
 [travis-url]: https://travis-ci.org/jshanson7/prefix-property
