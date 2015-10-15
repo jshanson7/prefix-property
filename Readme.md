@@ -36,7 +36,7 @@ js('backgroundColor') === 'backgroundColor';
 
 ```
 
-The default output of `prefixProperty()` is a JS-friendly string (looks like: `WebkitTransformOriginX`).  To get a CSS-friendly string, use `prefixProperty.css()` (looks like: `-webkit-transform-origin-x`).
+The default output of `prefixProperty()` is a JS-friendly prop (ex: `WebkitTransformOriginX`).  To get a CSS-friendly prop, use `prefixProperty.css()` (ex: `-webkit-transform-origin-x`).
 
 ## Testing
 [Run the tests on your browser here.](https://cdn.rawgit.com/jshanson7/prefix-property/master/test/test.inline.html)
