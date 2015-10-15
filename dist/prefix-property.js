@@ -1,112 +1,4 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.prefixProperty = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var MapCache = require('../internal/MapCache');
-
-/** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/**
- * Creates a function that memoizes the result of `func`. If `resolver` is
- * provided it determines the cache key for storing the result based on the
- * arguments provided to the memoized function. By default, the first argument
- * provided to the memoized function is coerced to a string and used as the
- * cache key. The `func` is invoked with the `this` binding of the memoized
- * function.
- *
- * **Note:** The cache is exposed as the `cache` property on the memoized
- * function. Its creation may be customized by replacing the `_.memoize.Cache`
- * constructor with one whose instances implement the [`Map`](http://ecma-international.org/ecma-262/6.0/#sec-properties-of-the-map-prototype-object)
- * method interface of `get`, `has`, and `set`.
- *
- * @static
- * @memberOf _
- * @category Function
- * @param {Function} func The function to have its output memoized.
- * @param {Function} [resolver] The function to resolve the cache key.
- * @returns {Function} Returns the new memoizing function.
- * @example
- *
- * var upperCase = _.memoize(function(string) {
- *   return string.toUpperCase();
- * });
- *
- * upperCase('fred');
- * // => 'FRED'
- *
- * // modifying the result cache
- * upperCase.cache.set('fred', 'BARNEY');
- * upperCase('fred');
- * // => 'BARNEY'
- *
- * // replacing `_.memoize.Cache`
- * var object = { 'user': 'fred' };
- * var other = { 'user': 'barney' };
- * var identity = _.memoize(_.identity);
- *
- * identity(object);
- * // => { 'user': 'fred' }
- * identity(other);
- * // => { 'user': 'fred' }
- *
- * _.memoize.Cache = WeakMap;
- * var identity = _.memoize(_.identity);
- *
- * identity(object);
- * // => { 'user': 'fred' }
- * identity(other);
- * // => { 'user': 'barney' }
- */
-function memoize(func, resolver) {
-  if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  var memoized = function() {
-    var args = arguments,
-        key = resolver ? resolver.apply(this, args) : args[0],
-        cache = memoized.cache;
-
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-    var result = func.apply(this, args);
-    memoized.cache = cache.set(key, result);
-    return result;
-  };
-  memoized.cache = new memoize.Cache;
-  return memoized;
-}
-
-// Assign cache to `_.memoize`.
-memoize.Cache = MapCache;
-
-module.exports = memoize;
-
-},{"../internal/MapCache":2}],2:[function(require,module,exports){
-var mapDelete = require('./mapDelete'),
-    mapGet = require('./mapGet'),
-    mapHas = require('./mapHas'),
-    mapSet = require('./mapSet');
-
-/**
- * Creates a cache object to store key/value pairs.
- *
- * @private
- * @static
- * @name Cache
- * @memberOf _.memoize
- */
-function MapCache() {
-  this.__data__ = {};
-}
-
-// Add functions to the `Map` cache.
-MapCache.prototype['delete'] = mapDelete;
-MapCache.prototype.get = mapGet;
-MapCache.prototype.has = mapHas;
-MapCache.prototype.set = mapSet;
-
-module.exports = MapCache;
-
-},{"./mapDelete":12,"./mapGet":13,"./mapHas":14,"./mapSet":15}],3:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -122,7 +14,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],4:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 /**
  * Converts `value` to a string if it's not one. An empty string is returned
  * for `null` or `undefined` values.
@@ -137,7 +29,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],5:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var deburr = require('../string/deburr'),
     words = require('../string/words');
 
@@ -165,7 +57,7 @@ function createCompounder(callback) {
 
 module.exports = createCompounder;
 
-},{"../string/deburr":19,"../string/words":21}],6:[function(require,module,exports){
+},{"../string/deburr":12,"../string/words":14}],4:[function(require,module,exports){
 /** Used to map latin-1 supplementary letters to basic latin letters. */
 var deburredLetters = {
   '\xc0': 'A',  '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',
@@ -200,7 +92,7 @@ function deburrLetter(letter) {
 
 module.exports = deburrLetter;
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -217,7 +109,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":3}],8:[function(require,module,exports){
+},{"./baseProperty":1}],6:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -234,7 +126,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":7,"./isLength":11}],9:[function(require,module,exports){
+},{"./getLength":5,"./isLength":9}],7:[function(require,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -260,7 +152,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isIndex = require('./isIndex'),
     isObject = require('../lang/isObject');
@@ -290,7 +182,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":16,"./isArrayLike":8,"./isIndex":9}],11:[function(require,module,exports){
+},{"../lang/isObject":10,"./isArrayLike":6,"./isIndex":7}],9:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -312,81 +204,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],12:[function(require,module,exports){
-/**
- * Removes `key` and its value from the cache.
- *
- * @private
- * @name delete
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed successfully, else `false`.
- */
-function mapDelete(key) {
-  return this.has(key) && delete this.__data__[key];
-}
-
-module.exports = mapDelete;
-
-},{}],13:[function(require,module,exports){
-/**
- * Gets the cached value for `key`.
- *
- * @private
- * @name get
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the cached value.
- */
-function mapGet(key) {
-  return key == '__proto__' ? undefined : this.__data__[key];
-}
-
-module.exports = mapGet;
-
-},{}],14:[function(require,module,exports){
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Checks if a cached value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function mapHas(key) {
-  return key != '__proto__' && hasOwnProperty.call(this.__data__, key);
-}
-
-module.exports = mapHas;
-
-},{}],15:[function(require,module,exports){
-/**
- * Sets `value` to `key` of the cache.
- *
- * @private
- * @name set
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to cache.
- * @param {*} value The value to cache.
- * @returns {Object} Returns the cache object.
- */
-function mapSet(key, value) {
-  if (key != '__proto__') {
-    this.__data__[key] = value;
-  }
-  return this;
-}
-
-module.exports = mapSet;
-
-},{}],16:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -416,7 +234,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],17:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var createCompounder = require('../internal/createCompounder');
 
 /**
@@ -445,30 +263,7 @@ var camelCase = createCompounder(function(result, word, index) {
 
 module.exports = camelCase;
 
-},{"../internal/createCompounder":5}],18:[function(require,module,exports){
-var baseToString = require('../internal/baseToString');
-
-/**
- * Capitalizes the first character of `string`.
- *
- * @static
- * @memberOf _
- * @category String
- * @param {string} [string=''] The string to capitalize.
- * @returns {string} Returns the capitalized string.
- * @example
- *
- * _.capitalize('fred');
- * // => 'Fred'
- */
-function capitalize(string) {
-  string = baseToString(string);
-  return string && (string.charAt(0).toUpperCase() + string.slice(1));
-}
-
-module.exports = capitalize;
-
-},{"../internal/baseToString":4}],19:[function(require,module,exports){
+},{"../internal/createCompounder":3}],12:[function(require,module,exports){
 var baseToString = require('../internal/baseToString'),
     deburrLetter = require('../internal/deburrLetter');
 
@@ -499,7 +294,7 @@ function deburr(string) {
 
 module.exports = deburr;
 
-},{"../internal/baseToString":4,"../internal/deburrLetter":6}],20:[function(require,module,exports){
+},{"../internal/baseToString":2,"../internal/deburrLetter":4}],13:[function(require,module,exports){
 var createCompounder = require('../internal/createCompounder');
 
 /**
@@ -527,7 +322,7 @@ var kebabCase = createCompounder(function(result, word, index) {
 
 module.exports = kebabCase;
 
-},{"../internal/createCompounder":5}],21:[function(require,module,exports){
+},{"../internal/createCompounder":3}],14:[function(require,module,exports){
 var baseToString = require('../internal/baseToString'),
     isIterateeCall = require('../internal/isIterateeCall');
 
@@ -567,7 +362,7 @@ function words(string, pattern, guard) {
 
 module.exports = words;
 
-},{"../internal/baseToString":4,"../internal/isIterateeCall":10}],22:[function(require,module,exports){
+},{"../internal/baseToString":2,"../internal/isIterateeCall":8}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -575,14 +370,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _lodashFunctionMemoize = require('lodash/function/memoize');
-
-var _lodashFunctionMemoize2 = _interopRequireDefault(_lodashFunctionMemoize);
-
-var _lodashStringCapitalize = require('lodash/string/capitalize');
-
-var _lodashStringCapitalize2 = _interopRequireDefault(_lodashStringCapitalize);
 
 var _lodashStringCamelCase = require('lodash/string/camelCase');
 
@@ -596,47 +383,10 @@ var styles = window.getComputedStyle(document.documentElement, '');
 var prefix = (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) || styles.OLink === '' && ['', 'o'])[1];
 var jsPrefix = 'Webkit|Moz|ms|O'.match(new RegExp('(' + prefix + ')', 'i'))[1];
 var cssPrefix = '-' + prefix + '-';
+var jsProps = {};
+var cssProps = {};
 
-var propExists = (0, _lodashFunctionMemoize2['default'])(function (property) {
-  return styles[property] !== undefined;
-});
-
-var jsProp = (0, _lodashFunctionMemoize2['default'])(function (property) {
-  var camelProp = (0, _lodashStringCamelCase2['default'])(property);
-  if (propExists(camelProp)) {
-    return camelProp;
-  }
-
-  var prefixed = jsPrefix + (0, _lodashStringCapitalize2['default'])(camelProp);
-  if (propExists(prefixed)) {
-    return prefixed;
-  }
-
-  // none found
-  return jsProp;
-});
-
-var cssProp = (0, _lodashFunctionMemoize2['default'])(function (property) {
-  var kebabProp = (0, _lodashStringKebabCase2['default'])(property);
-  if (propExists(kebabProp)) {
-    return kebabProp;
-  }
-
-  var prefixed = cssPrefix + kebabProp;
-  if (propExists(prefixed)) {
-    return prefixed;
-  }
-
-  // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
-  // are valid props since they are undefined on the style object, yet valid in CSS
-  if (prefix === 'moz') {
-    var prefixedJS = jsProp(property);
-    return prefixedJS.lastIndexOf(jsPrefix, 0) === 0 ? '-' + (0, _lodashStringKebabCase2['default'])(prefixedJS) : kebabProp;
-  }
-
-  // none found
-  return kebabProp;
-});
+exports['default'] = prefixProperty;
 
 function prefixProperty(property) {
   return jsProp(property);
@@ -646,8 +396,58 @@ prefixProperty.css = cssProp;
 prefixProperty.jsPrefix = jsPrefix;
 prefixProperty.cssPrefix = cssPrefix;
 
-exports['default'] = prefixProperty;
+function jsProp(property) {
+  var memo = jsProps[property];
+  if (memo) {
+    return memo;
+  }
+  var camelProp = (0, _lodashStringCamelCase2['default'])(property);
+  if (propExists(camelProp)) {
+    return jsProps[property] = camelProp;
+  }
+
+  var prefixed = jsPrefix + capitalize(camelProp);
+  if (propExists(prefixed)) {
+    return jsProps[property] = prefixed;
+  }
+
+  return jsProp;
+}
+
+function cssProp(property) {
+  var memo = cssProps[property];
+  if (memo) {
+    return memo;
+  }
+  var kebabProp = (0, _lodashStringKebabCase2['default'])(property);
+  if (propExists(kebabProp)) {
+    return cssProps[property] = kebabProp;
+  }
+
+  var prefixed = cssPrefix + kebabProp;
+  if (propExists(prefixed)) {
+    return cssProps[property] = prefixed;
+  }
+
+  // TODO: in firefox, figure out a way test if prefixed, hyphenated props like -moz-appearance
+  // are valid props since they are undefined on the style object, yet valid in CSS
+  if (prefix === 'moz') {
+    var prefixedJS = jsProp(property);
+    var mozPrefixed = prefixedJS.lastIndexOf(jsPrefix, 0) === 0 ? '-' + (0, _lodashStringKebabCase2['default'])(prefixedJS) : kebabProp;
+    return cssProps[property] = mozPrefixed;
+  }
+
+  return kebabProp;
+}
+
+function propExists(property) {
+  return styles[property] !== undefined;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 module.exports = exports['default'];
 
-},{"lodash/function/memoize":1,"lodash/string/camelCase":17,"lodash/string/capitalize":18,"lodash/string/kebabCase":20}]},{},[22])(22)
+},{"lodash/string/camelCase":11,"lodash/string/kebabCase":13}]},{},[15])(15)
 });

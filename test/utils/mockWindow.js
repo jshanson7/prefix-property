@@ -1,4 +1,4 @@
-import { isNaN, parseInt, forEach } from 'lodash';
+import MockCSSStyleDeclaration from './MockCSSStyleDeclaration';
 
 const styleMocksByBrowser = {
   chrome: require('../data/styleMocks/chrome.json'),
@@ -24,15 +24,3 @@ export default ({ browser }) => {
 
   return window;
 };
-
-
-function MockCSSStyleDeclaration(styleObj) {
-  forEach(styleObj, (value, key) => {
-    if (isNaN(parseInt(key))) {
-      this[key] = value;
-    } else {
-      this.push(value);
-    }
-  });
-}
-MockCSSStyleDeclaration.prototype = Object.create(Array.prototype);
