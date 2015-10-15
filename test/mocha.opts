@@ -1,2 +1,2 @@
 --require babel-core/register
---reporter dot
+--reporter mocha-lcov-reporter
