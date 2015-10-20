@@ -1,49 +1,33 @@
-const jsMemos = {};
-const cssMemos = {};
+const jsProp = (() => {
+  const jsMemos = {};
+  return property =>
+    jsMemos[property] || (jsMemos[property] = (() => {
+      const camelProp = camelCase(property);
+      if (propExists(camelProp)) { return camelProp; }
+      const prefixed = getJSPrefix() + capitalize(camelProp);
+      if (propExists(prefixed)) { return prefixed; }
 
-function jsProp(property) {
-  const memo = jsMemos[property];
-  if (memo) { return memo; }
-  const camelProp = camelCase(property);
-  if (propExists(camelProp)) { return jsMemos[property] = camelProp; }
-  const prefixed = getJSPrefix() + capitalize(camelProp);
-  if (propExists(prefixed)) { return jsMemos[property] = prefixed; }
-
-  return camelProp;
-}
-
-function cssProp(property) {
-  const memo = cssMemos[property];
-  if (memo) { return memo; }
-  const kebabProp = kebabCase(property);
-  if (propExists(kebabProp)) { return cssMemos[property] = kebabProp; }
-  const prefixed = getCSSPrefix() + kebabProp;
-  if (propExists(prefixed)) { return cssMemos[property] = prefixed; }
-
-  if (getPrefix() === 'moz') {
-    const prefixedJS = jsProp(property);
-    const mozPrefixed = (prefixedJS.lastIndexOf(getJSPrefix(), 0) === 0) ?
-      '-' + kebabCase(prefixedJS) :
-      kebabProp;
-    return cssMemos[property] = mozPrefixed;
-  }
-
-  return kebabProp;
-}
-
-const getStyles = (() => {
-  let styles = null;
-  return () =>
-    styles || (styles = window.getComputedStyle(document.documentElement, ''));
+      return camelProp;
+    })());
 })();
 
-const getPrefix = (() => {
-  let prefix = null;
-  return () =>
-    prefix || (prefix = (() => {
-      const styles = getStyles();
-      return (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) ||
-        (styles.OLink === '' && ['', 'o']))[1];
+const cssProp = (() => {
+  const cssMemos = {};
+  return property =>
+    cssMemos[property] || (cssMemos[property] = (() => {
+      const kebabProp = kebabCase(property);
+      if (propExists(kebabProp)) { return kebabProp; }
+      const prefixed = getCSSPrefix() + kebabProp;
+      if (propExists(prefixed)) { return prefixed; }
+      if (getPrefix() === 'moz') {
+        const prefixedJS = jsProp(property);
+        const mozPrefixed = (prefixedJS.lastIndexOf(getJSPrefix(), 0) === 0) ?
+          '-' + kebabCase(prefixedJS) :
+          kebabProp;
+        return mozPrefixed;
+      }
+
+      return kebabProp;
     })());
 })();
 
@@ -57,6 +41,22 @@ const getCSSPrefix = (() => {
   let cssPrefix = null;
   return () =>
     cssPrefix || (cssPrefix = `-${getPrefix()}-`);
+})();
+
+const getPrefix = (() => {
+  let prefix = null;
+  return () =>
+    prefix || (prefix = (() => {
+      const styles = getStyles();
+      return (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) ||
+        (styles.OLink === '' && ['', 'o']))[1];
+    })());
+})();
+
+const getStyles = (() => {
+  let styles = null;
+  return () =>
+    styles || (styles = window.getComputedStyle(document.documentElement, ''));
 })();
 
 function propExists(property) {

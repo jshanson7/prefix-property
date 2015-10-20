@@ -66,62 +66,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	var jsMemos = {};
-	var cssMemos = {};
+	var jsProp = (function () {
+	  var jsMemos = {};
+	  return function (property) {
+	    return jsMemos[property] || (jsMemos[property] = (function () {
+	      var camelProp = camelCase(property);
+	      if (propExists(camelProp)) {
+	        return camelProp;
+	      }
+	      var prefixed = getJSPrefix() + capitalize(camelProp);
+	      if (propExists(prefixed)) {
+	        return prefixed;
+	      }
 
-	function jsProp(property) {
-	  var memo = jsMemos[property];
-	  if (memo) {
-	    return memo;
-	  }
-	  var camelProp = camelCase(property);
-	  if (propExists(camelProp)) {
-	    return jsMemos[property] = camelProp;
-	  }
-	  var prefixed = getJSPrefix() + capitalize(camelProp);
-	  if (propExists(prefixed)) {
-	    return jsMemos[property] = prefixed;
-	  }
-
-	  return camelProp;
-	}
-
-	function cssProp(property) {
-	  var memo = cssMemos[property];
-	  if (memo) {
-	    return memo;
-	  }
-	  var kebabProp = kebabCase(property);
-	  if (propExists(kebabProp)) {
-	    return cssMemos[property] = kebabProp;
-	  }
-	  var prefixed = getCSSPrefix() + kebabProp;
-	  if (propExists(prefixed)) {
-	    return cssMemos[property] = prefixed;
-	  }
-
-	  if (getPrefix() === 'moz') {
-	    var prefixedJS = jsProp(property);
-	    var mozPrefixed = prefixedJS.lastIndexOf(getJSPrefix(), 0) === 0 ? '-' + kebabCase(prefixedJS) : kebabProp;
-	    return cssMemos[property] = mozPrefixed;
-	  }
-
-	  return kebabProp;
-	}
-
-	var getStyles = (function () {
-	  var styles = null;
-	  return function () {
-	    return styles || (styles = window.getComputedStyle(document.documentElement, ''));
+	      return camelProp;
+	    })());
 	  };
 	})();
 
-	var getPrefix = (function () {
-	  var prefix = null;
-	  return function () {
-	    return prefix || (prefix = (function () {
-	      var styles = getStyles();
-	      return (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) || styles.OLink === '' && ['', 'o'])[1];
+	var cssProp = (function () {
+	  var cssMemos = {};
+	  return function (property) {
+	    return cssMemos[property] || (cssMemos[property] = (function () {
+	      var kebabProp = kebabCase(property);
+	      if (propExists(kebabProp)) {
+	        return kebabProp;
+	      }
+	      var prefixed = getCSSPrefix() + kebabProp;
+	      if (propExists(prefixed)) {
+	        return prefixed;
+	      }
+	      if (getPrefix() === 'moz') {
+	        var prefixedJS = jsProp(property);
+	        var mozPrefixed = prefixedJS.lastIndexOf(getJSPrefix(), 0) === 0 ? '-' + kebabCase(prefixedJS) : kebabProp;
+	        return mozPrefixed;
+	      }
+
+	      return kebabProp;
 	    })());
 	  };
 	})();
@@ -137,6 +118,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var cssPrefix = null;
 	  return function () {
 	    return cssPrefix || (cssPrefix = '-' + getPrefix() + '-');
+	  };
+	})();
+
+	var getPrefix = (function () {
+	  var prefix = null;
+	  return function () {
+	    return prefix || (prefix = (function () {
+	      var styles = getStyles();
+	      return (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) || styles.OLink === '' && ['', 'o'])[1];
+	    })());
+	  };
+	})();
+
+	var getStyles = (function () {
+	  var styles = null;
+	  return function () {
+	    return styles || (styles = window.getComputedStyle(document.documentElement, ''));
 	  };
 	})();
 
