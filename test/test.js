@@ -51,15 +51,15 @@ browsersToTest.forEach(browser => {
         )
       );
 
-      describe('#jsPrefix', () =>
-        it('jsPrefix === ' + prefixesByBrowser[browser].js, () =>
-          assert(jsPrefix === prefixesByBrowser[browser].js)
+      describe('#jsPrefix()', () =>
+        it('jsPrefix() === ' + prefixesByBrowser[browser].js, () =>
+          assert(jsPrefix() === prefixesByBrowser[browser].js)
         )
       );
 
-      describe('#cssPrefix', () =>
-        it('cssPrefix === ' + prefixesByBrowser[browser].css, () =>
-          assert(cssPrefix === prefixesByBrowser[browser].css)
+      describe('#cssPrefix()', () =>
+        it('cssPrefix() === ' + prefixesByBrowser[browser].css, () =>
+          assert(cssPrefix() === prefixesByBrowser[browser].css)
         )
       );
 

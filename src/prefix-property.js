@@ -1,25 +1,12 @@
-export default prefixProperty;
-
-const styles = window.getComputedStyle(document.documentElement, '');
-const prefix = (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) ||
-  (styles.OLink === '' && ['', 'o']))[1];
-const jsPrefix = ('Webkit|Moz|ms|O').match(new RegExp('(' + prefix + ')', 'i'))[1];
-const cssPrefix = `-${prefix}-`;
 const jsMemos = {};
 const cssMemos = {};
-
-function prefixProperty(property) { return jsProp(property); }
-prefixProperty.js = jsProp;
-prefixProperty.css = cssProp;
-prefixProperty.jsPrefix = jsPrefix;
-prefixProperty.cssPrefix = cssPrefix;
 
 function jsProp(property) {
   const memo = jsMemos[property];
   if (memo) { return memo; }
   const camelProp = camelCase(property);
   if (propExists(camelProp)) { return jsMemos[property] = camelProp; }
-  const prefixed = jsPrefix + capitalize(camelProp);
+  const prefixed = getJSPrefix() + capitalize(camelProp);
   if (propExists(prefixed)) { return jsMemos[property] = prefixed; }
 
   return camelProp;
@@ -30,12 +17,12 @@ function cssProp(property) {
   if (memo) { return memo; }
   const kebabProp = kebabCase(property);
   if (propExists(kebabProp)) { return cssMemos[property] = kebabProp; }
-  const prefixed = cssPrefix + kebabProp;
+  const prefixed = getCSSPrefix() + kebabProp;
   if (propExists(prefixed)) { return cssMemos[property] = prefixed; }
 
-  if (prefix === 'moz') {
+  if (getPrefix() === 'moz') {
     const prefixedJS = jsProp(property);
-    const mozPrefixed = (prefixedJS.lastIndexOf(jsPrefix, 0) === 0) ?
+    const mozPrefixed = (prefixedJS.lastIndexOf(getJSPrefix(), 0) === 0) ?
       '-' + kebabCase(prefixedJS) :
       kebabProp;
     return cssMemos[property] = mozPrefixed;
@@ -44,8 +31,36 @@ function cssProp(property) {
   return kebabProp;
 }
 
+const getStyles = (() => {
+  let styles = null;
+  return () =>
+    styles || (styles = window.getComputedStyle(document.documentElement, ''));
+})();
+
+const getPrefix = (() => {
+  let prefix = null;
+  return () =>
+    prefix || (prefix = (() => {
+      const styles = getStyles();
+      return (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) ||
+        (styles.OLink === '' && ['', 'o']))[1];
+    })());
+})();
+
+const getJSPrefix = (() => {
+  let jsPrefix = null;
+  return () =>
+    jsPrefix || (jsPrefix = ('Webkit|Moz|ms|O').match(new RegExp('(' + getPrefix() + ')', 'i'))[1]);
+})();
+
+const getCSSPrefix = (() => {
+  let cssPrefix = null;
+  return () =>
+    cssPrefix || (cssPrefix = `-${getPrefix()}-`);
+})();
+
 function propExists(property) {
-  return styles[property] !== undefined;
+  return getStyles()[property] !== undefined;
 }
 
 function capitalize(str) {
@@ -64,3 +79,11 @@ function kebabCase(str) {
   return str.replace(/([a-z\d])([A-Z])/g, '$1_$2')
     .toLowerCase().replace(/[ _]/g, '-');
 }
+
+function prefixProperty(property) { return jsProp(property); }
+prefixProperty.js = jsProp;
+prefixProperty.css = cssProp;
+prefixProperty.jsPrefix = getJSPrefix;
+prefixProperty.cssPrefix = getCSSPrefix;
+
+export default prefixProperty;
