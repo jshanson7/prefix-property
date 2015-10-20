@@ -6,9 +6,9 @@ export default function () {
 
   if (uaMatches[1] === 'Chrome') {
     if (ua.match(/\b(OPR|Edge)\/(\d+)/) != null) {
-      return 'Opera'
+      return 'Opera';
     }
   }
 
   return (uaMatches[2] ? uaMatches[1] : navigator.appName).toLowerCase();
-};
+}

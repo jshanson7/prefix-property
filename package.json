@@ -1,6 +1,6 @@
 {
   "name": "prefix-property",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Vendor-prefix any property.",
   "author": "Jeff Hanson",
   "license": "MIT",
@@ -14,16 +14,22 @@
   ],
   "main": "dist/prefix-property.js",
   "scripts": {
-    "start": "npm run test",
-    "build": "npm run browserify && npm run uglify && npm run inliner",
+    "start": "npm run dev",
+    "dev": "node_modules/.bin/parallelshell 'npm run build-watch' 'npm run test-watch'",
     "test": "npm run lint && npm run test-node",
+    "test-watch": "node_modules/.bin/parallelshell 'npm run lint-watch' 'npm run test-node-watch'",
     "test-browser": "open test/test.html",
-    "test-node": "./node_modules/.bin/mocha test/test.js",
-    "test-watch": "./node_modules/.bin/mocha test/test.js --watch",
-    "browserify": "node_modules/.bin/browserify src/prefix-property.js > dist/prefix-property.js -t babelify -s prefixProperty && node_modules/.bin/browserify test/test.js > test/test.browser.js -t babelify",
-    "lint": "node_modules/.bin/eslint src/**/*.js test/test.js",
+    "test-node": "node_modules/.bin/mocha test/test",
+    "test-node-watch": "node_modules/.bin/watch 'npm run test-node' test src",
+    "build": "npm run webpack && node_modules/.bin/parallelshell 'npm run webpack-test' 'npm run uglify'",
+    "build-watch": "node_modules/.bin/parallelshell 'npm run webpack-watch' 'npm run webpack-test-watch'",
+    "webpack": "node_modules/.bin/webpack",
+    "webpack-watch": "npm run webpack -- --watch",
+    "webpack-test": "npm run webpack -- --config webpack.test.config.js",
+    "webpack-test-watch": "npm run webpack-test -- --watch",
     "uglify": "node_modules/.bin/uglifyjs dist/prefix-property.js -c -m -o dist/prefix-property.min.js",
-    "inliner": "node_modules/.bin/inliner test/test.html > test/test.inline.html"
+    "lint": "node_modules/.bin/eslint src test --ignore-pattern ./**/*/*.{compiled,min}.js --quiet",
+    "lint-watch": "node_modules/.bin/watch 'npm run lint' test src"
   },
   "repository": {
     "type": "git",
@@ -36,16 +42,20 @@
   "dependencies": {},
   "devDependencies": {
     "babel": "^5.8.23",
-    "babel-core": "^5.8.25",
     "babel-eslint": "^4.1.3",
-    "babelify": "^6.3.0",
-    "browserify": "^11.2.0",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.25",
     "coveralls": "^2.11.4",
+    "eslint-loader": "^1.1.0",
     "eslint": "^1.6.0",
-    "inliner": "^1.3.0",
+    "json-loader": "^0.5.3",
     "lodash": "^3.10.1",
     "mocha": "^2.3.3",
+    "mocha-loader": "^0.7.1",
     "mocha-lcov-reporter": "^1.0.0",
-    "uglifyjs": "^2.4.10"
+    "parallelshell": "^2.0.0",
+    "uglifyjs": "^2.4.10",
+    "watch": "^0.16.0",
+    "webpack": "^1.12.2"
   }
 }
