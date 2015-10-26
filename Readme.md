@@ -27,8 +27,8 @@ css('fontFeatureSettings');     // => '-webkit-font-feature-settings'
 css('font-feature-settings');   // => '-webkit-font-feature-settings'
 
 // browser's prefix:
-console.log(jsPrefix());    // => 'Webkit'
-console.log(cssPrefix());   // => '-webkit-'
+jsPrefix();    // => 'Webkit'
+cssPrefix();   // => '-webkit-'
 
 // non-prefixed properties:
 js('color');              // => 'color'
