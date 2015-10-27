@@ -19,8 +19,8 @@ export default ({ browser }) => {
   global.document = document;
   global.mockedBrowser = window.mockedBrowser = browser;
 
-  delete require.cache[require.resolve('../../src/prefix-property')];
-  window.prefixProperty = require('../../src/prefix-property');
+  delete require.cache[require.resolve('../../dist/prefix-property')];
+  window.prefixProperty = require('../../dist/prefix-property');
 
   return window;
 };
