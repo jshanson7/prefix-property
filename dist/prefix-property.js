@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = _Object$assign(function prefixProperty(property) {
 	  return (0, _.js)(property);
-	}, { js: _.js, css: _.css, jsPrefix: _.jsPrefix, cssPrefix: _.cssPrefix });
+	}, { js: _.js, css: _.css, prefix: _.prefix, jsPrefix: _.jsPrefix, cssPrefix: _.cssPrefix });
 	module.exports = exports['default'];
 
 /***/ },

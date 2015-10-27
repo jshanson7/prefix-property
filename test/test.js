@@ -2,8 +2,8 @@ import assert from 'assert';
 import { kebabCase, camelCase } from 'lodash';
 import mockWindow from './utils/mockWindow';
 import getBrowser from './utils/getBrowser';
+import isNode from './utils/isNode';
 
-const isNode = typeof process.browser === 'undefined';
 const browsersToTest = isNode ? ['chrome', 'firefox', 'safari'] : [getBrowser()];
 const unprefixedPropsByBrowser = {
   chrome: require('./data/unprefixedProps/chrome.json'),
@@ -11,9 +11,9 @@ const unprefixedPropsByBrowser = {
   firefox: require('./data/unprefixedProps/firefox.json')
 };
 const prefixesByBrowser = {
-  chrome: { js: 'Webkit', css: '-webkit-' },
-  safari: { js: 'Webkit', css: '-webkit-' },
-  firefox: { js: 'Moz', css: '-moz-' }
+  chrome: { js: 'Webkit', css: '-webkit-', base: 'webkit' },
+  safari: { js: 'Webkit', css: '-webkit-', base: 'webkit' },
+  firefox: { js: 'Moz', css: '-moz-', base: 'moz' }
 };
 
 browsersToTest.forEach(browser => {
@@ -23,6 +23,7 @@ browsersToTest.forEach(browser => {
   const {
     js,
     css,
+    prefix,
     jsPrefix,
     cssPrefix
   } = prefixProperty;
@@ -48,6 +49,12 @@ browsersToTest.forEach(browser => {
       describe('is a function', () =>
         it('should be a function', () =>
           assert(typeof prefixProperty === 'function')
+        )
+      );
+
+      describe('#prefix()', () =>
+        it('prefix() === ' + prefixesByBrowser[browser].base, () =>
+          assert(prefix() === prefixesByBrowser[browser].base)
         )
       );
 

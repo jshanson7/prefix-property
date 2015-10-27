@@ -44,11 +44,11 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 
-	var _interopRequireDefault = __webpack_require__(2)['default'];
+	var _interopRequireDefault = __webpack_require__(1)['default'];
 
-	var _assert = __webpack_require__(3);
+	var _assert = __webpack_require__(2);
 
 	var _assert2 = _interopRequireDefault(_assert);
 
@@ -62,27 +62,31 @@
 
 	var _utilsGetBrowser2 = _interopRequireDefault(_utilsGetBrowser);
 
-	var isNode = typeof process.browser === 'undefined';
-	var browsersToTest = isNode ? ['chrome', 'firefox', 'safari'] : [(0, _utilsGetBrowser2['default'])()];
+	var _utilsIsNode = __webpack_require__(39);
+
+	var _utilsIsNode2 = _interopRequireDefault(_utilsIsNode);
+
+	var browsersToTest = _utilsIsNode2['default'] ? ['chrome', 'firefox', 'safari'] : [(0, _utilsGetBrowser2['default'])()];
 	var unprefixedPropsByBrowser = {
-	  chrome: __webpack_require__(39),
-	  safari: __webpack_require__(40),
-	  firefox: __webpack_require__(41)
+	  chrome: __webpack_require__(40),
+	  safari: __webpack_require__(41),
+	  firefox: __webpack_require__(42)
 	};
 	var prefixesByBrowser = {
-	  chrome: { js: 'Webkit', css: '-webkit-' },
-	  safari: { js: 'Webkit', css: '-webkit-' },
-	  firefox: { js: 'Moz', css: '-moz-' }
+	  chrome: { js: 'Webkit', css: '-webkit-', base: 'webkit' },
+	  safari: { js: 'Webkit', css: '-webkit-', base: 'webkit' },
+	  firefox: { js: 'Moz', css: '-moz-', base: 'moz' }
 	};
 
 	browsersToTest.forEach(function (browser) {
-	  if (isNode) {
+	  if (_utilsIsNode2['default']) {
 	    (0, _utilsMockWindow2['default'])({ browser: browser });
 	  }
 
 	  var prefixProperty = window.prefixProperty;
 	  var js = prefixProperty.js;
 	  var css = prefixProperty.css;
+	  var prefix = prefixProperty.prefix;
 	  var jsPrefix = prefixProperty.jsPrefix;
 	  var cssPrefix = prefixProperty.cssPrefix;
 
@@ -108,6 +112,12 @@
 	      describe('is a function', function () {
 	        return it('should be a function', function () {
 	          return (0, _assert2['default'])(typeof prefixProperty === 'function');
+	        });
+	      });
+
+	      describe('#prefix()', function () {
+	        return it('prefix() === ' + prefixesByBrowser[browser].base, function () {
+	          return (0, _assert2['default'])(prefix() === prefixesByBrowser[browser].base);
 	        });
 	      });
 
@@ -172,112 +182,9 @@
 	    });
 	  });
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-
-	'use strict';
-
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while (len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () {
-	    return '/';
-	};
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function () {
-	    return 0;
-	};
-
-/***/ },
-/* 2 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -291,7 +198,7 @@
 	exports.__esModule = true;
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// http://wiki.commonjs.org/wiki/Unit_Testing/1.0
@@ -323,9 +230,9 @@
 	// this is a bug in node module loading as far as I am concerned
 	'use strict';
 
-	var _Object$keys = __webpack_require__(4)['default'];
+	var _Object$keys = __webpack_require__(3)['default'];
 
-	var util = __webpack_require__(14);
+	var util = __webpack_require__(13);
 
 	var pSlice = Array.prototype.slice;
 	var hasOwn = Object.prototype.hasOwnProperty;
@@ -650,51 +557,51 @@
 	};
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	module.exports = { "default": __webpack_require__(5), __esModule: true };
+	module.exports = { "default": __webpack_require__(4), __esModule: true };
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	__webpack_require__(5);
+	module.exports = __webpack_require__(11).Object.keys;
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	__webpack_require__(6);
-	module.exports = __webpack_require__(12).Object.keys;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// 19.1.2.14 Object.keys(O)
 	'use strict';
 
-	var toObject = __webpack_require__(7);
+	var toObject = __webpack_require__(6);
 
-	__webpack_require__(9)('keys', function ($keys) {
+	__webpack_require__(8)('keys', function ($keys) {
 	  return function keys(it) {
 	    return $keys(toObject(it));
 	  };
 	});
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
 	'use strict';
 
-	var defined = __webpack_require__(8);
+	var defined = __webpack_require__(7);
 	module.exports = function (it) {
 	  return Object(defined(it));
 	};
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 	// 7.2.1 RequireObjectCoercible(argument)
@@ -706,30 +613,30 @@
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
 	'use strict';
 
 	module.exports = function (KEY, exec) {
-	  var $def = __webpack_require__(10),
-	      fn = (__webpack_require__(12).Object || {})[KEY] || Object[KEY],
+	  var $def = __webpack_require__(9),
+	      fn = (__webpack_require__(11).Object || {})[KEY] || Object[KEY],
 	      exp = {};
 	  exp[KEY] = exec(fn);
-	  $def($def.S + $def.F * __webpack_require__(13)(function () {
+	  $def($def.S + $def.F * __webpack_require__(12)(function () {
 	    fn(1);
 	  }), 'Object', exp);
 	};
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var global = __webpack_require__(11),
-	    core = __webpack_require__(12),
+	var global = __webpack_require__(10),
+	    core = __webpack_require__(11),
 	    PROTOTYPE = 'prototype';
 	var ctx = function ctx(fn, that) {
 	  return function () {
@@ -778,7 +685,7 @@
 	module.exports = $def;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -789,7 +696,7 @@
 	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -798,7 +705,7 @@
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -812,7 +719,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -838,7 +745,7 @@
 
 	'use strict';
 
-	var _Object$keys = __webpack_require__(4)['default'];
+	var _Object$keys = __webpack_require__(3)['default'];
 
 	var _Object$getOwnPropertyNames = __webpack_require__(15)['default'];
 
@@ -1367,7 +1274,109 @@
 	function hasOwnProperty(obj, prop) {
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(1)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)))
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+
+	'use strict';
+
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while (len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () {
+	    return '/';
+	};
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function () {
+	    return 0;
+	};
 
 /***/ },
 /* 15 */
@@ -1416,7 +1425,7 @@
 	// 19.1.2.7 Object.getOwnPropertyNames(O)
 	'use strict';
 
-	__webpack_require__(9)('getOwnPropertyNames', function () {
+	__webpack_require__(8)('getOwnPropertyNames', function () {
 	  return __webpack_require__(19).get;
 	});
 
@@ -1456,7 +1465,7 @@
 	'use strict';
 
 	var IObject = __webpack_require__(21),
-	    defined = __webpack_require__(8);
+	    defined = __webpack_require__(7);
 	module.exports = function (it) {
 	  return IObject(defined(it));
 	};
@@ -1514,7 +1523,7 @@
 
 	var toIObject = __webpack_require__(20);
 
-	__webpack_require__(9)('getOwnPropertyDescriptor', function ($getOwnPropertyDescriptor) {
+	__webpack_require__(8)('getOwnPropertyDescriptor', function ($getOwnPropertyDescriptor) {
 	  return function getOwnPropertyDescriptor(it, key) {
 	    return $getOwnPropertyDescriptor(toIObject(it), key);
 	  };
@@ -8443,7 +8452,7 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var _interopRequireDefault = __webpack_require__(2)['default'];
+	var _interopRequireDefault = __webpack_require__(1)['default'];
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
@@ -11787,7 +11796,7 @@
 
 				exports['default'] = _Object$assign(function prefixProperty(property) {
 					return (0, _.js)(property);
-				}, { js: _.js, css: _.css, jsPrefix: _.jsPrefix, cssPrefix: _.cssPrefix });
+				}, { js: _.js, css: _.css, prefix: _.prefix, jsPrefix: _.jsPrefix, cssPrefix: _.cssPrefix });
 				module.exports = exports['default'];
 
 				/***/
@@ -13039,6 +13048,19 @@
 
 /***/ },
 /* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = typeof process.browser === 'undefined';
+	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+
+/***/ },
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -13389,7 +13411,7 @@
 	];
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -13776,7 +13798,7 @@
 	];
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = [
